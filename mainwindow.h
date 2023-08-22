@@ -26,6 +26,8 @@ private slots:
 
     void on_actionPixel_triggered();
 
+    void on_actionReta_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

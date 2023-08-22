@@ -2,6 +2,7 @@
 
 #include <QMessageBox>
 #include <QPixelFormat>
+#include <QPainter>
 
 matDisplay::matDisplay(QWidget *parent) : QLabel(parent)
 {
@@ -29,21 +30,45 @@ void matDisplay::mouseMoveEvent(QMouseEvent *ev)
 
 void matDisplay::mousePressEvent(QMouseEvent *ev)
 {
+    static QPoint firstClickPos;
     if(ev->button() == Qt::LeftButton)
     {
+        QPoint mouse_pos = ev->pos();
+
         // Se esta no modo de edição "Pixel"
         if (mode == 1)
         {
-            QPoint mouse_pos = ev->pos();
             QImage image = this->pixmap().toImage();
             if (mouse_pos.x() >= 0 && mouse_pos.x() < image.width() &&
                 mouse_pos.y() >= 0 && mouse_pos.y() < image.height())
             {
-                // Adicionar espessura e color variáveis
+                // Adicionar espessura e colr variáveis
                 QRgb color = qRgb(255, 0, 0);
 
                 image.setPixel(mouse_pos.x(), mouse_pos.y(), color);
                 this->setPixmap(QPixmap::fromImage(image));
+            }
+        }
+
+        // Modo de edição "Linha"
+        if (mode == 2) {
+            if (mode == 2) {
+                if (!firstClickPos.isNull()) {
+                    // If firstClickPos is not null, we already have the first click position
+                    QImage image = this->pixmap().toImage();
+                    QPainter painter(&image);
+
+                    // Draw a line between firstClickPos and mouse_pos
+                    painter.setPen(QPen(QColor(0, 0, 255), 2));  // Set line color and width
+                    painter.drawLine(firstClickPos, mouse_pos);
+
+                    this->setPixmap(QPixmap::fromImage(image));
+
+                    firstClickPos = QPoint();  // Reset firstClickPos for the next line
+                } else {
+                    // Store the position of the first click
+                    firstClickPos = mouse_pos;
+                }
             }
         }
     }

@@ -8,9 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // matdisplay --> mainwindow
     connect(ui->mat_Display, SIGNAL(sendMousePosition(QPoint&)), this, SLOT(showMousePosition(QPoint&)));
     connect(ui->mat_Display, SIGNAL(mousePressed(QPoint&)), this, SLOT(handleMouseColor(QPoint&)));
-    connect(ui->mat_Display, SIGNAL(mousePressed(QPoint&)), this, SLOT(on_actionPixel_triggered()));
 }
 
 MainWindow::~MainWindow()
@@ -79,6 +79,20 @@ void MainWindow::on_buton_load_image_clicked()
 
 void MainWindow::on_actionPixel_triggered()
 {
+    // Seta o modo de edição como Pixel
     ui->mat_Display->setDrawPixelMode(1);
+    QMessageBox msg;
+    msg.setText("Pixel draw pressed!");
+    msg.exec();
+}
+
+
+void MainWindow::on_actionReta_triggered()
+{
+    // Seta o modo de ediçã como linha
+    ui->mat_Display->setDrawPixelMode(2);
+    QMessageBox msg;
+    msg.setText("Line draw pressed!");
+    msg.exec();
 }
 
