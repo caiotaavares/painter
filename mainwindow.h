@@ -30,6 +30,8 @@ private slots:
 
     void on_actionAlgoritmo_de_Bresenham_triggered();
 
+    void on_actionC_rculo_y_sqrt_R_R_x_x_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

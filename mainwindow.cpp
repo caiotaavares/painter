@@ -106,3 +106,13 @@ void MainWindow::on_actionAlgoritmo_de_Bresenham_triggered()
     msg.exec();
 }
 
+
+void MainWindow::on_actionC_rculo_y_sqrt_R_R_x_x_triggered()
+{
+    // Seta o modo de edição como Cŕiculo (y = sqrt(R*R – x *x))
+    ui->mat_Display->setDrawPixelMode(4);
+    QMessageBox msg;
+    msg.setText("Brasenham draw pressed!");
+    msg.exec();
+}
+

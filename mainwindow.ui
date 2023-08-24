@@ -131,6 +131,8 @@
     <addaction name="actionPixel"/>
     <addaction name="actionReta"/>
     <addaction name="actionAlgoritmo_de_Bresenham"/>
+    <addaction name="separator"/>
+    <addaction name="actionC_rculo_y_sqrt_R_R_x_x"/>
    </widget>
    <addaction name="menuComputa_o_Gr_fica"/>
    <addaction name="menuDesenhar"/>
@@ -159,6 +161,11 @@
   <action name="actionAlgoritmo_de_Bresenham">
    <property name="text">
     <string>Algoritmo de Bresenham</string>
+   </property>
+  </action>
+  <action name="actionC_rculo_y_sqrt_R_R_x_x">
+   <property name="text">
+    <string>Círculo (y = sqrt(R*R – x *x))</string>
    </property>
   </action>
  </widget>
