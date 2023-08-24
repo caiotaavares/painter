@@ -28,6 +28,8 @@ private slots:
 
     void on_actionReta_triggered();
 
+    void on_actionAlgoritmo_de_Bresenham_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

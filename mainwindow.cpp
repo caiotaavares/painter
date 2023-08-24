@@ -96,3 +96,13 @@ void MainWindow::on_actionReta_triggered()
     msg.exec();
 }
 
+
+void MainWindow::on_actionAlgoritmo_de_Bresenham_triggered()
+{
+    // Seta o modo de edição como Brasenhan
+    ui->mat_Display->setDrawPixelMode(3);
+    QMessageBox msg;
+    msg.setText("Brasenham draw pressed!");
+    msg.exec();
+}
+

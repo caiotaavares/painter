@@ -130,6 +130,7 @@
     </property>
     <addaction name="actionPixel"/>
     <addaction name="actionReta"/>
+    <addaction name="actionAlgoritmo_de_Bresenham"/>
    </widget>
    <addaction name="menuComputa_o_Gr_fica"/>
    <addaction name="menuDesenhar"/>
@@ -152,7 +153,12 @@
   </action>
   <action name="actionReta">
    <property name="text">
-    <string>Reta</string>
+    <string>Reta (y = ax + b)</string>
+   </property>
+  </action>
+  <action name="actionAlgoritmo_de_Bresenham">
+   <property name="text">
+    <string>Algoritmo de Bresenham</string>
    </property>
   </action>
  </widget>
