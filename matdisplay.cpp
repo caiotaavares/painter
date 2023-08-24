@@ -65,7 +65,7 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                 double b = firstClickPos.y() - a * firstClickPos.x();
 
                 // Desenha a linha usando y = ax + b
-                painter.setPen(QPen(QColor(0, 0, 255), 2));  // Escolhe a cor da linha
+                painter.setPen(QPen(QColor(0, 0, 255), 1));  // Escolhe a cor da linha
                 for (int x = firstClickPos.x(); x <= mouse_pos.x(); ++x) {
                     int y = static_cast<int>(a * x + b);
                     // Usa drawPoint() APENAS PARA DESENHAR CADA PONTO DA RETA
@@ -90,40 +90,47 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                 QImage image = this->pixmap().toImage();
                 QPainter painter(&image);
 
+                /**
+                 * Armazena os pontos x e y das extremidades da
+                 * reta
+                 */
                 int x1 = firstClickPos.x();
                 int y1 = firstClickPos.y();
                 int x2 = mouse_pos.x();
                 int y2 = mouse_pos.y();
 
-                // Calcula o valor de dx and dy
+                // abs() calcula o valor absoluto da operação passada
                 int dx = abs(x2 - x1);
                 int dy = abs(y2 - y1);
 
-                // Determina a direção da linha sx e sy
+                /**
+                 * Determina a direção da linha sx e sy
+                 * com base na diferença de valores dos eixos
+                 * PERMITE REALIZAR OPERAÇÕES EM MULTIPLOS OCTANTES
+                 */
                 int sx = (x1 < x2) ? 1 : -1;
                 int sy = (y1 < y2) ? 1 : -1;
 
                 // erro
-                int err = dx - dy;
+                int error = dx - dy;
 
                 // Utiliza o algoritmo de Bresenham para desenhar os pixels
                 while (true) {
-                    /**
-                     * drawPoint() é usado apenas para desenhar cada pixelna coordenada
-                     * Pedida
-                     **/
+
+                    // drawPoint() é usado apenas para desenhar cada pixel na coordenada
+                    // edida
                     painter.drawPoint(x1, y1);
 
-                    if (x1 == x2 && y1 == y2)
-                        break;
+                    // Não desenha com extremidades no mesmo ponto
+                    if (x1 == x2 && y1 == y2) break;
 
-                    int e2 = 2 * err;
+                    int e2 = 2 * error;
                     if (e2 > -dy) {
-                        err -= dy;
+                        error -= dy;
                         x1 += sx;
                     }
                     if (e2 < dx) {
-                        err += dx;
+                        error += dx;
                         y1 += sy;
                     }
                 }
