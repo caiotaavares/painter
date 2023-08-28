@@ -19,9 +19,15 @@
      <rect>
       <x>40</x>
       <y>40</y>
-      <width>541</width>
-      <height>501</height>
+      <width>540</width>
+      <height>500</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>540</width>
+      <height>500</height>
+     </size>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>

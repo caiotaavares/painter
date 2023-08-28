@@ -7,6 +7,14 @@
 matDisplay::matDisplay(QWidget *parent) : QLabel(parent)
 {
     this->setMouseTracking(true);
+
+    // Configura o tamanho do QLabel e cria uma imagem branca
+    QSize size(540, 500);
+    QImage image(size, QImage::Format_RGB32);
+    image.fill(Qt::white); // Preenche a imagem com branco
+
+    // Define a imagem inicial no QLabel
+    this->setPixmap(QPixmap::fromImage(image));
 }
 
 void matDisplay::setDrawPixelMode(int newMode)
@@ -84,12 +92,22 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                 double a = static_cast<double>(mouse_pos.y() - firstClickPos.y()) / (mouse_pos.x() - firstClickPos.x());
                 double b = firstClickPos.y() - a * firstClickPos.x();
 
-                // Desenha a linha usando y = ax + b
-                for (int x = firstClickPos.x(); x <= mouse_pos.x(); ++x) {
+                // Determina a direção da linha sx e sy
+                // com base na diferença de valores dos eixos
+                // PERMITE REALIZAR OPERAÇÕES EM MULTIPLOS OCTANTES
+                int sx = (cx > fcx) ? 1 : -1;
+
+                int x = fcx;
+                while (true) {
+
+                    if (x == cx) break;
+
                     int y = static_cast<int>(a * x + b);
                     // Usa drawPoint() APENAS PARA DESENHAR CADA PONTO DA RETA
                     // CALCULADA COM "y = ax + b".
                     painter.drawPoint(x, y);
+
+                    x = x + sx;
                 }
             }
 
