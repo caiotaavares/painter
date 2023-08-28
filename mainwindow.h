@@ -32,6 +32,8 @@ private slots:
 
     void on_actionC_rculo_y_sqrt_R_R_x_x_triggered();
 
+    void on_actionCirculo_Equa_o_param_trica_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

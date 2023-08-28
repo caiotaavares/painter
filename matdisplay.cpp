@@ -14,6 +14,12 @@ void matDisplay::setDrawPixelMode(int newMode)
     mode = newMode;
 }
 
+/**
+ * @brief matDisplay::mouseMoveEvent
+ * @param ev
+ * Evento de movimentação do mouse mostra a posição relativa
+ * e o rgb de cada pixel.
+ */
 void matDisplay::mouseMoveEvent(QMouseEvent *ev)
 {
     QPoint mouse_pos = ev->pos();
@@ -28,38 +34,52 @@ void matDisplay::mouseMoveEvent(QMouseEvent *ev)
     emit mousePressed(mouse_pos_color);
 }
 
+/**
+ * @brief matDisplay::mousePressEvent
+ * @param ev
+ * Evento que armazena todas as operações gráficas e de desenho
+ */
 void matDisplay::mousePressEvent(QMouseEvent *ev)
 {
+    // Posição do primeiro clique
     static QPoint firstClickPos;
     if(ev->button() == Qt::LeftButton)
     {
-        QPoint mouse_pos = ev->pos();
-
         // armazena os pixels da imagem
         QImage image = this->pixmap().toImage();
+
+        // armazena a imagem na classe QPainter
         QPainter painter(&image);
-        painter.setPen(QPen(QColor(0, 0, 255), 2));  // Escolhe a cor da linha
 
-        // Modo de edição "Pixel"
-        if (mode == 1)
-        {
-//            QImage image = this->pixmap().toImage();
-            if (mouse_pos.x() >= 0 && mouse_pos.x() < image.width() &&
-                mouse_pos.y() >= 0 && mouse_pos.y() < image.height())
+        // seta a cor e espessura a ser utilizada na classe painter
+        painter.setPen(QPen(QColor(0, 0, 255), 2));
+
+
+        // Posição do segundo clique
+        QPoint mouse_pos = ev->pos();
+
+        int cx = mouse_pos.x(); // Posição x do mouse no segundo clique
+        int cy = mouse_pos.y(); // Posição y do mouse no segundo clique
+        int fcx = firstClickPos.x(); // Posição x do mouse no primeiro clique
+        int fcy = firstClickPos.y(); // Posição y do mouse no primeiro clique
+
+        //
+        // MODO DE DESENHO PIXEL
+        //
+        if (mode == 1) {
+            if (fcx >= 0 && fcx < image.width() &&
+                fcy >= 0 && fcy < image.height())
             {
-                // Adicionar espessura e colr variáveis
-                QRgb color = qRgb(255, 0, 0);
-
-                // USANDO setPixel()
-                image.setPixel(mouse_pos.x(), mouse_pos.y(), color);
-                this->setPixmap(QPixmap::fromImage(image));
+                painter.drawPoint(fcx, fcy);
             }
         }
 
-        // Modo de edição "Linha"
-        if (mode == 2) {
-            // Se firstClickPost não é nulo, já existe uma coordenada do primeiro clique armazenada
-            if (!firstClickPos.isNull()) {
+        // Se firstClickPost não é nulo, já existe uma coordenada do primeiro clique armazenada
+        if (!firstClickPos.isNull()) {
+            //
+            // MODO DE DESENHO RETA
+            //
+            if (mode == 2) {
                 // armazena os parâmetros a e b de "y = ax + b"
                 double a = static_cast<double>(mouse_pos.y() - firstClickPos.y()) / (mouse_pos.x() - firstClickPos.x());
                 double b = firstClickPos.y() - a * firstClickPos.x();
@@ -71,43 +91,22 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                     // CALCULADA COM "y = ax + b".
                     painter.drawPoint(x, y);
                 }
-
-                // Atualiza a imagem
-                this->setPixmap(QPixmap::fromImage(image));
-
-                // Reseta o clique
-                firstClickPos = QPoint();
-            } else {
-                firstClickPos = mouse_pos;
             }
-        }
 
-        // Modo de edição "Algoritmo de Bresenham"
-        if (mode == 3) {
-            if (!firstClickPos.isNull()) {
-//                QImage image = this->pixmap().toImage();
-//                QPainter painter(&image);
-
-                /**
-                 * Armazena os pontos x e y das extremidades da
-                 * reta
-                 */
-                int x1 = firstClickPos.x();
-                int y1 = firstClickPos.y();
-                int x2 = mouse_pos.x();
-                int y2 = mouse_pos.y();
-
+            //
+            // DESENHO DA RETA (ALGORITMO DE BRASENHAM)
+            //
+            if (mode == 3) {
+                // Armazena os pontos x e y das extremidades da
                 // abs() calcula o valor absoluto da operação passada
-                int dx = abs(x2 - x1);
-                int dy = abs(y2 - y1);
+                int dx = abs(cx - fcx);
+                int dy = abs(cy - fcy);
 
-                /**
-                 * Determina a direção da linha sx e sy
-                 * com base na diferença de valores dos eixos
-                 * PERMITE REALIZAR OPERAÇÕES EM MULTIPLOS OCTANTES
-                 */
-                int sx = (x1 < x2) ? 1 : -1;
-                int sy = (y1 < y2) ? 1 : -1;
+                // Determina a direção da linha sx e sy
+                // com base na diferença de valores dos eixos
+                // PERMITE REALIZAR OPERAÇÕES EM MULTIPLOS OCTANTES
+                int sx = (cx < fcx) ? 1 : -1;
+                int sy = (cy < fcy) ? 1 : -1;
 
                 // erro
                 int error = dx - dy;
@@ -117,41 +116,28 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
 
                     // drawPoint() é usado apenas para desenhar cada pixel na coordenada
                     // edida
-                    painter.drawPoint(x1, y1);
+                    painter.drawPoint(cx, cy);
 
                     // Não desenha com extremidades no mesmo ponto
-                    if (x1 == x2 && y1 == y2) break;
+                    if (cx == fcx && cy == fcy) break;
 
                     int e2 = 2 * error;
                     if (e2 > -dy) {
                         error -= dy;
-                        x1 += sx;
+                        cx += sx;
                     }
                     if (e2 < dx) {
                         error += dx;
-                        y1 += sy;
+                        cy += sy;
                     }
                 }
-
-                this->setPixmap(QPixmap::fromImage(image));
-                firstClickPos = QPoint();
-            } else {
-                firstClickPos = mouse_pos;
             }
-        }
 
-
-        if (mode == 4) {
-            if (!firstClickPos.isNull()) {
-
-                int fcx = firstClickPos.x();
-                int cx = mouse_pos.x(); // Posição x do mouse
-                int cy = mouse_pos.y(); // Posição y do mouse
-
+            //
+            // DESENHO DA CIRCUNFERÊNCIA (y = sqrt(R*R - x*x))
+            //
+            if (mode == 4) {
                 int R = (cx - fcx) / 2; // Raio do círculo
-
-//                QImage image = this->pixmap().toImage();
-//                QPainter painter(&image);
 
                 for (int x = -R; x <= R; x++) {
                     int y = static_cast<int>(sqrt(R * R - x * x));
@@ -166,12 +152,38 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                         painter.drawPoint(cx + x - R, cy - y);
                     }
                 }
-
-                this->setPixmap(QPixmap::fromImage(image));
-                firstClickPos = QPoint();
-            } else {
-                firstClickPos = mouse_pos;
             }
+
+            //
+            // DESENHO DA CIRCUNFERÊNCIA (EQUAÇÃO PARAMÉTRICA)
+            //
+            if (mode == 5) {
+                int R = (cx - fcx) / 2; // Raio do círculo
+                double a; // Ângulo
+
+                // O ângulo itera até 2*pi em 0.001º
+                for (a = 0; a <= 2 * M_PI; a += 0.001) {
+                    int x = static_cast<int>(R * cos(a));
+                    int y = static_cast<int>(R * sin(a));
+
+                    if (cy + y >= 0 && cy + y < image.height()) {
+                        painter.drawPoint(cx + x - R, cy + y);
+                    }
+
+                    if (cy - y >= 0 && cy - y < image.height()) {
+                        painter.drawPoint(cx + x - R, cy - y);
+                    }
+                }
+            }
+
+            // Atualiza a imagem
+            this->setPixmap(QPixmap::fromImage(image));
+
+            // Reseta o clique
+            firstClickPos = QPoint();
+
+        } else {
+            firstClickPos = mouse_pos;
         }
     }
     if (ev->button() == Qt::RightButton)

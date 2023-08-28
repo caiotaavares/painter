@@ -112,7 +112,16 @@ void MainWindow::on_actionC_rculo_y_sqrt_R_R_x_x_triggered()
     // Seta o modo de edição como Cŕiculo (y = sqrt(R*R – x *x))
     ui->mat_Display->setDrawPixelMode(4);
     QMessageBox msg;
-    msg.setText("Brasenham draw pressed!");
+    msg.setText("Cŕiculo (y = sqrt(R*R – x *x))");
+    msg.exec();
+}
+
+
+void MainWindow::on_actionCirculo_Equa_o_param_trica_triggered()
+{
+    ui->mat_Display->setDrawPixelMode(5);
+    QMessageBox msg;
+    msg.setText("Cŕiculo (y = sqrt(R*R – x *x))");
     msg.exec();
 }
 
