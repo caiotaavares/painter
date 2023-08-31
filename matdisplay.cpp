@@ -96,7 +96,6 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                 // com base na diferença de valores dos eixos
                 // PERMITE REALIZAR OPERAÇÕES EM MULTIPLOS OCTANTES
                 int sx = (cx > fcx) ? 1 : -1;
-
                 int x = fcx;
                 while (true) {
 
