@@ -93,14 +93,15 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                 int y = cy;
 
                 // Verifica se Dx é maior do que Dy
-                if ((fcx - cx) >= (fcy - cy)) {
+                if (fabs(fcx - cx) >= fabs(fcy - cy)) {
                     // Incrementa/decrementa x e calcula y
                     int inc = (fcx > cx) ? 1 : -1;
 
                     while (x != fcx) {
                         painter.drawPoint(x, y);
                         x += inc;
-                        y = static_cast<int>(m * (x - cx) + cy); // Calcule a coordenada y com base na inclinação da reta.
+                        // Calcula a coordenada y com base na inclinação da reta.
+                        y = static_cast<int>(m * (x - cx) + cy);
                     }
                 } else {
                     // Incrementa/decrementa y e calcula x
@@ -109,13 +110,43 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                     while (y != fcy) {
                         painter.drawPoint(x, y);
                         y += inc;
-                        x = static_cast<int>((y - cy) / m + cx); // Calcule a coordenada x com base na inclinação da reta.
+                        // Calcula a coordenada x com base na inclinação da reta.
+                        x = static_cast<int>((y - cy) / m + cx);
                     }
                 }
             }
 
+            //
+            // DESENHO DA RETA PARAMÉTRICA
+            //
+            if (mode == 6) {
+                int x1 = cx;
+                int y1 = cy;
+                int x2 = fcx;
+                int y2 = fcy;
 
+                int dx = x2 - x1;
+                int dy = y2 - y1;
 
+                int steps;
+                if (abs(dx) > abs(dy)) {
+                    steps = abs(dx);
+                } else {
+                    steps = abs(dy);
+                }
+
+                double xIncrement = static_cast<double>(dx) / steps;
+                double yIncrement = static_cast<double>(dy) / steps;
+
+                double x = x1;
+                double y = y1;
+
+                for (int i = 0; i <= steps; i++) {
+                    painter.drawPoint(static_cast<int>(x), static_cast<int>(y));
+                    x += xIncrement;
+                    y += yIncrement;
+                }
+            }
             //
             // DESENHO DA RETA (ALGORITMO DE BRASENHAM)
             //

@@ -36,6 +36,8 @@ private slots:
 
     void on_pushButtonRGBCalc_clicked();
 
+    void on_actionReta_Param_trica_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

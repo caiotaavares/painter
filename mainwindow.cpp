@@ -121,7 +121,7 @@ void MainWindow::on_actionCirculo_Equa_o_param_trica_triggered()
 {
     ui->mat_Display->setDrawPixelMode(5);
     QMessageBox msg;
-    msg.setText("Cŕiculo (y = sqrt(R*R – x *x))");
+    msg.setText("Cículo (y = sqrt(R*R – x *x))");
     msg.exec();
 }
 
@@ -131,5 +131,14 @@ void MainWindow::on_pushButtonRGBCalc_clicked()
     int r = ui->spinBoxR->value();
     int g = ui->spinBoxG->value();
     int b = ui->spinBoxB->value();
+}
+
+
+void MainWindow::on_actionReta_Param_trica_triggered()
+{
+    ui->mat_Display->setDrawPixelMode(6);
+    QMessageBox msg;
+    msg.setText("Reta (Paramétrica).");
+    msg.exec();
 }
 

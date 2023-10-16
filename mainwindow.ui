@@ -235,6 +235,7 @@
     <addaction name="actionPixel"/>
     <addaction name="separator"/>
     <addaction name="actionReta"/>
+    <addaction name="actionReta_Param_trica"/>
     <addaction name="actionAlgoritmo_de_Bresenham"/>
     <addaction name="separator"/>
     <addaction name="actionC_rculo_y_sqrt_R_R_x_x"/>
@@ -266,7 +267,7 @@
   </action>
   <action name="actionAlgoritmo_de_Bresenham">
    <property name="text">
-    <string>Algoritmo de Bresenham</string>
+    <string>Reta (Bresenham)</string>
    </property>
   </action>
   <action name="actionC_rculo_y_sqrt_R_R_x_x">
@@ -277,6 +278,11 @@
   <action name="actionCirculo_Equa_o_param_trica">
    <property name="text">
     <string>Circulo (Equação paramétrica)</string>
+   </property>
+  </action>
+  <action name="actionReta_Param_trica">
+   <property name="text">
+    <string>Reta (Paramétrica)</string>
    </property>
   </action>
  </widget>
