@@ -88,27 +88,33 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
             // MODO DE DESENHO RETA
             //
             if (mode == 2) {
-                // armazena os parâmetros a e b de "y = ax + b"
-                double a = static_cast<double>(mouse_pos.y() - firstClickPos.y()) / (mouse_pos.x() - firstClickPos.x());
-                double b = firstClickPos.y() - a * firstClickPos.x();
+                double m = static_cast<double>(fcy - cy) / (fcx - cx);
+                int x = cx; // Comece a partir da coordenada x inicial
+                int y = cy;
 
-                // Determina a direção da linha sx e sy
-                // com base na diferença de valores dos eixos
-                // PERMITE REALIZAR OPERAÇÕES EM MULTIPLOS OCTANTES
-                int sx = (cx > fcx) ? 1 : -1;
-                int x = fcx;
-                while (true) {
+                // Verifica se Dx é maior do que Dy
+                if ((fcx - cx) >= (fcy - cy)) {
+                    // Incrementa/decrementa x e calcula y
+                    int inc = (fcx > cx) ? 1 : -1;
 
-                    if (x == cx) break;
+                    while (x != fcx) {
+                        painter.drawPoint(x, y);
+                        x += inc;
+                        y = static_cast<int>(m * (x - cx) + cy); // Calcule a coordenada y com base na inclinação da reta.
+                    }
+                } else {
+                    // Incrementa/decrementa y e calcula x
+                    int inc = (fcy > cy) ? 1 : -1;
 
-                    int y = static_cast<int>(a * x + b);
-                    // Usa drawPoint() APENAS PARA DESENHAR CADA PONTO DA RETA
-                    // CALCULADA COM "y = ax + b".
-                    painter.drawPoint(x, y);
-
-                    x = x + sx;
+                    while (y != fcy) {
+                        painter.drawPoint(x, y);
+                        y += inc;
+                        x = static_cast<int>((y - cy) / m + cx); // Calcule a coordenada x com base na inclinação da reta.
+                    }
                 }
             }
+
+
 
             //
             // DESENHO DA RETA (ALGORITMO DE BRASENHAM)

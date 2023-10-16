@@ -34,6 +34,8 @@ private slots:
 
     void on_actionCirculo_Equa_o_param_trica_triggered();
 
+    void on_pushButtonRGBCalc_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

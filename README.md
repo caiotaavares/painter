@@ -7,7 +7,7 @@ Simple image editor and raster graphics editor with Qt6 and c++
 	- [ ] 2.2 - Negativar Imagem
 	- [X] 2.3 - Desenhar Pixel
 	- [X] 2.4 - Desenhar Retas
-- [ ] 3 - Desenhar Retas usando Pixels
+- [X] 3 - Desenhar Retas usando Pixels
 	- [X] 3.1 - y = ax + b
 	- [ ] 3.2 - Paramétrica
 - [X] 4 - Bresenhan retas

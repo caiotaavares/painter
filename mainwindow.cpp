@@ -89,10 +89,10 @@ void MainWindow::on_actionPixel_triggered()
 
 void MainWindow::on_actionReta_triggered()
 {
-    // Seta o modo de ediçã como linha
+    // Seta o modo de ediçã como reta paramétrica
     ui->mat_Display->setDrawPixelMode(2);
     QMessageBox msg;
-    msg.setText("Line draw pressed!");
+    msg.setText("Desenhando reta paramétrica!");
     msg.exec();
 }
 
@@ -123,5 +123,13 @@ void MainWindow::on_actionCirculo_Equa_o_param_trica_triggered()
     QMessageBox msg;
     msg.setText("Cŕiculo (y = sqrt(R*R – x *x))");
     msg.exec();
+}
+
+
+void MainWindow::on_pushButtonRGBCalc_clicked()
+{
+    int r = ui->spinBoxR->value();
+    int g = ui->spinBoxG->value();
+    int b = ui->spinBoxB->value();
 }
 
