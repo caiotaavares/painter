@@ -1,7 +1,7 @@
 # painter
 Simple image editor and raster graphics editor with Qt6 and c++
 
-- [ ] 1 - RGB - HSL
+- [X] 1 - RGB - HSL
 - [ ] 2 - Manipulação básica de pixels
 	- [X] 2.1 - Carregar Imagem
 	- [ ] 2.2 - Negativar Imagem

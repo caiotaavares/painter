@@ -5,6 +5,8 @@
 #include <qfiledialog.h>
 #include <QMessageBox>
 
+#include <cmath>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -22,6 +24,10 @@ public slots:
     void handleMouseColor(QPoint &pos);
 
 private slots:
+    void RGBToHSL(int R, int G, int B, double &H, double &S, double &L);
+
+    void HSLToRGB(double H, double S, double L, int &R, int &G, int &B);
+
     void on_buton_load_image_clicked();
 
     void on_actionPixel_triggered();
@@ -39,6 +45,22 @@ private slots:
     void on_actionReta_Param_trica_triggered();
 
     void on_actionCircunfer_ncia_Brasenham_triggered();
+
+    void on_spinBoxR_valueChanged(int arg1);
+
+    void on_spinBoxG_valueChanged(int arg1);
+
+    void on_spinBoxB_valueChanged(int arg1);
+
+    void on_doubleSpinBoxH_valueChanged(double arg1);
+
+    void on_doubleSpinBoxS_valueChanged(double arg1);
+
+    void on_doubleSpinBoxL_valueChanged(double arg1);
+
+    void on_pushButtonCalcHSL_clicked();
+
+    void on_pushButtonCalcRGB_clicked();
 
 private:
     Ui::MainWindow *ui;

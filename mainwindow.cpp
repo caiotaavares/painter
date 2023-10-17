@@ -23,6 +23,103 @@ void MainWindow::showMousePosition(QPoint &pos)
     ui->mouse_position_label->setText("x: " + QString::number(pos.x()) + ",y: " + QString::number(pos.y()));
 }
 
+/**
+ * COLOR PARAMS
+ * @brief MainWindow::handleMouseColor
+ * @param pos
+ */
+void MainWindow::RGBToHSL(int R, int G, int B, double &H, double &S, double &L) {
+    // Normaliza os valores de RGB para [0, 1]
+    double r = R / 255.0;
+    double g = G / 255.0;
+    double b = B / 255.0;
+
+    double maxVal = std::max({r, g, b});
+    double minVal = std::min({r, g, b});
+
+    // Calcula o L em %
+    L = ((maxVal + minVal) / 2.0) * 100.0;
+
+    if (maxVal == minVal) {
+        // Escala de cinza
+        H = S = 0.0;
+    } else {
+        double d = maxVal - minVal;
+
+        // Calcula a saturação em %
+        S = L > 50.0 ? (d / (2.0 - maxVal - minVal)) * 100.0 : (d / (maxVal + minVal)) * 100.0;
+
+        // Calcula o H em graus
+        if (maxVal == r) {
+            H = (g - b) / d + (g < b ? 6.0 : 0.0);
+        } else if (maxVal == g) {
+            H = (b - r) / d + 2.0;
+        } else {
+            H = (r - g) / d + 4.0;
+        }
+
+        H *= 60.0;
+        if (H < 0) {
+            H += 360.0;
+        }
+    }
+}
+
+void MainWindow::HSLToRGB(double H, double S, double L, int &R, int &G, int &B) {
+    // Ensure H is within the range [0, 360]
+    while (H < 0.0) {
+        H += 360.0;
+    }
+    while (H >= 360.0) {
+        H -= 360.0;
+    }
+
+    // Normalize S and L to [0, 1]
+    S /= 100.0;
+    L /= 100.0;
+
+    double C = (1.0 - std::abs(2.0 * L - 1.0)) * S;
+    double X = C * (1.0 - std::abs(std::fmod(H / 60.0, 2) - 1.0));
+    double m = L - 0.5 * C;
+
+    double R1, G1, B1;
+
+    if (H >= 0 && H < 60) {
+        R1 = C;
+        G1 = X;
+        B1 = 0.0;
+    } else if (H >= 60 && H < 120) {
+        R1 = X;
+        G1 = C;
+        B1 = 0.0;
+    } else if (H >= 120 && H < 180) {
+        R1 = 0.0;
+        G1 = C;
+        B1 = X;
+    } else if (H >= 180 && H < 240) {
+        R1 = 0.0;
+        G1 = X;
+        B1 = C;
+    } else if (H >= 240 && H < 300) {
+        R1 = X;
+        G1 = 0.0;
+        B1 = C;
+    } else {
+        R1 = C;
+        G1 = 0.0;
+        B1 = X;
+    }
+
+    R = static_cast<int>((R1 + m) * 255);
+    G = static_cast<int>((G1 + m) * 255);
+    B = static_cast<int>((B1 + m) * 255);
+}
+
+/**
+ * @brief MainWindow::handleMouseColor
+ * @param pos
+ */
+
 void MainWindow::handleMouseColor(QPoint &pos)
 {
     QImage displayedImage = ui->mat_Display->pixmap().toImage();
@@ -56,16 +153,6 @@ void MainWindow::on_buton_load_image_clicked()
         {
             // Image displayed in the original resolution
             ui->mat_Display->setPixmap(QPixmap::fromImage(image));
-
-//            // Get the dimensions of the QLabel widget
-//            int labelWidth = ui->mat_Display->width();
-//            int labelHeight = ui->mat_Display->height();
-
-//            // Resize the image to match the dimensions of the QLabel while maintaining aspect ratio
-//            QImage scaledImage = image.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio);
-
-//            // Convert the resized image to QPixmap and set it to the QLabel
-//            ui->mat_Display->setPixmap(QPixmap::fromImage(scaledImage));
         }
         else
         {
@@ -149,5 +236,24 @@ void MainWindow::on_actionCircunfer_ncia_Brasenham_triggered()
     QMessageBox msg;
     msg.setText("Circunferência (Brasenham).");
     msg.exec();
+}
+
+void MainWindow::on_pushButtonCalcHSL_clicked()
+{
+    double H, S, L;
+    RGBToHSL(ui->spinBoxR->value(), ui->spinBoxG->value(), ui->spinBoxB->value(), H, S, L);
+    ui->doubleSpinBoxH->setValue(H);
+    ui->doubleSpinBoxS->setValue(S);
+    ui->doubleSpinBoxL->setValue(L);
+}
+
+
+void MainWindow::on_pushButtonCalcRGB_clicked()
+{
+    int R, G, B;
+    HSLToRGB(ui->doubleSpinBoxH->value(), ui->doubleSpinBoxS->value(), ui->doubleSpinBoxL->value(), R, G, B);
+    ui->spinBoxR->setValue(R);
+    ui->spinBoxG->setValue(G);
+    ui->spinBoxB->setValue(B);
 }
 
