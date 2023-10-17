@@ -11,7 +11,7 @@ Simple image editor and raster graphics editor with Qt6 and c++
 	- [X] 3.1 - y = ax + b
 	- [X] 3.2 - Paramétrica
 - [X] 4 - Bresenhan retas
-- [ ] 5 - Bresenhan Circunferência
+- [X] 5 - Bresenhan Circunferência
 - [X] 6 - Círculos usando Pixels - Usando Simetria
 	- [X] 6.1 - y = pow((R * R) - (x * x))
 	- [X] 6.2 - Paramétrica

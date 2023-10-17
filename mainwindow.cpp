@@ -109,10 +109,10 @@ void MainWindow::on_actionAlgoritmo_de_Bresenham_triggered()
 
 void MainWindow::on_actionC_rculo_y_sqrt_R_R_x_x_triggered()
 {
-    // Seta o modo de edição como Cŕiculo (y = sqrt(R*R – x *x))
+    // Seta o modo de edição como Círcunferência (y = sqrt(R*R – x *x))
     ui->mat_Display->setDrawPixelMode(4);
     QMessageBox msg;
-    msg.setText("Cŕiculo (y = sqrt(R*R – x *x))");
+    msg.setText("Círculo (y = sqrt(R*R – x *x))");
     msg.exec();
 }
 
@@ -121,7 +121,7 @@ void MainWindow::on_actionCirculo_Equa_o_param_trica_triggered()
 {
     ui->mat_Display->setDrawPixelMode(5);
     QMessageBox msg;
-    msg.setText("Cículo (y = sqrt(R*R – x *x))");
+    msg.setText("Cícunferência (Paramétrica)");
     msg.exec();
 }
 
@@ -139,6 +139,15 @@ void MainWindow::on_actionReta_Param_trica_triggered()
     ui->mat_Display->setDrawPixelMode(6);
     QMessageBox msg;
     msg.setText("Reta (Paramétrica).");
+    msg.exec();
+}
+
+
+void MainWindow::on_actionCircunfer_ncia_Brasenham_triggered()
+{
+    ui->mat_Display->setDrawPixelMode(7);
+    QMessageBox msg;
+    msg.setText("Circunferência (Brasenham).");
     msg.exec();
 }
 

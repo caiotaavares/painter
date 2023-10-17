@@ -216,7 +216,7 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                 double a; // Ângulo
 
                 // O ângulo itera até 2*pi em 0.001º
-                for (a = 0; a <= 2 * M_PI; a += 0.001) {
+                for (a = 0; a <= 2 * M_PI; a += 0.001/R) {
                     int x = static_cast<int>(R * cos(a));
                     int y = static_cast<int>(R * sin(a));
 
@@ -227,6 +227,51 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                     if (cy - y >= 0 && cy - y < image.height()) {
                         painter.drawPoint(cx + x - R, cy - y);
                     }
+                }
+            }
+
+            //
+            // Circunferência (Brasenham)
+            //
+            if (mode == 7) {
+                // Raio do círculo
+                int R = (cx - fcx) / 2;
+                int x = 0;
+                int y = R;
+                int h = 1 - R;
+                int dE = 3;
+                int dSE = -2 * R + 5;
+
+                // Desenha o primeiro ponto em cada octante
+                painter.drawPoint(cx + x, cy + y);
+                painter.drawPoint(cx - x, cy + y);
+                painter.drawPoint(cx + x, cy - y);
+                painter.drawPoint(cx - x, cy - y);
+                painter.drawPoint(cx + y, cy + x);
+                painter.drawPoint(cx - y, cy + x);
+                painter.drawPoint(cx + y, cy - x);
+                painter.drawPoint(cx - y, cy - x);
+                while (x < y) {
+                    if (h < 0) { // Seleciona E
+                        h = h + dE;
+                        dE = dE + 2;
+                        dSE = dSE + 2;
+                    } else { // Seleciona SE
+                        h = h + dSE;
+                        dE = dE + 2;
+                        dSE = dSE + 4;
+                        y = y - 1;
+                    }
+                    x = x + 1;
+                    // Desenha um ponto em cada octante
+                    painter.drawPoint(cx + x, cy + y);
+                    painter.drawPoint(cx - x, cy + y);
+                    painter.drawPoint(cx + x, cy - y);
+                    painter.drawPoint(cx - x, cy - y);
+                    painter.drawPoint(cx + y, cy + x);
+                    painter.drawPoint(cx - y, cy + x);
+                    painter.drawPoint(cx + y, cy - x);
+                    painter.drawPoint(cx - y, cy - x);
                 }
             }
 

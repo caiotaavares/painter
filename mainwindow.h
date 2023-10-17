@@ -38,6 +38,8 @@ private slots:
 
     void on_actionReta_Param_trica_triggered();
 
+    void on_actionCircunfer_ncia_Brasenham_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

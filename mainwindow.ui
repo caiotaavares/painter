@@ -240,6 +240,8 @@
     <addaction name="separator"/>
     <addaction name="actionC_rculo_y_sqrt_R_R_x_x"/>
     <addaction name="actionCirculo_Equa_o_param_trica"/>
+    <addaction name="actionC_rculo_Param_trica"/>
+    <addaction name="actionCircunfer_ncia_Brasenham"/>
    </widget>
    <addaction name="menuComputa_o_Gr_fica"/>
    <addaction name="menuDesenhar"/>
@@ -283,6 +285,16 @@
   <action name="actionReta_Param_trica">
    <property name="text">
     <string>Reta (Paramétrica)</string>
+   </property>
+  </action>
+  <action name="actionC_rculo_Param_trica">
+   <property name="text">
+    <string>Círculo (Paramétrica)</string>
+   </property>
+  </action>
+  <action name="actionCircunfer_ncia_Brasenham">
+   <property name="text">
+    <string>Circunferência (Brasenham)</string>
    </property>
   </action>
  </widget>
