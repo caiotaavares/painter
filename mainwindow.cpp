@@ -24,9 +24,14 @@ void MainWindow::showMousePosition(QPoint &pos)
 }
 
 /**
- * COLOR PARAMS
- * @brief MainWindow::handleMouseColor
- * @param pos
+ * MANIPULAÇÃO DE CORES
+ * @brief MainWindow::RGBToHSL
+ * @param R
+ * @param G
+ * @param B
+ * @param H
+ * @param S
+ * @param L
  */
 void MainWindow::RGBToHSL(int R, int G, int B, double &H, double &S, double &L) {
     // Normaliza os valores de RGB para [0, 1]
@@ -66,7 +71,7 @@ void MainWindow::RGBToHSL(int R, int G, int B, double &H, double &S, double &L) 
 }
 
 void MainWindow::HSLToRGB(double H, double S, double L, int &R, int &G, int &B) {
-    // Ensure H is within the range [0, 360]
+    // Garante que o H está entre [0, 360]
     while (H < 0.0) {
         H += 360.0;
     }
@@ -74,7 +79,7 @@ void MainWindow::HSLToRGB(double H, double S, double L, int &R, int &G, int &B) 
         H -= 360.0;
     }
 
-    // Normalize S and L to [0, 1]
+    // Normaliza o L e o S para [0, 1]
     S /= 100.0;
     L /= 100.0;
 
@@ -84,6 +89,7 @@ void MainWindow::HSLToRGB(double H, double S, double L, int &R, int &G, int &B) 
 
     double R1, G1, B1;
 
+    // Cálculo
     if (H >= 0 && H < 60) {
         R1 = C;
         G1 = X;
@@ -110,15 +116,11 @@ void MainWindow::HSLToRGB(double H, double S, double L, int &R, int &G, int &B) 
         B1 = X;
     }
 
+    // Definição das cores
     R = static_cast<int>((R1 + m) * 255);
     G = static_cast<int>((G1 + m) * 255);
     B = static_cast<int>((B1 + m) * 255);
 }
-
-/**
- * @brief MainWindow::handleMouseColor
- * @param pos
- */
 
 void MainWindow::handleMouseColor(QPoint &pos)
 {
@@ -151,7 +153,7 @@ void MainWindow::on_buton_load_image_clicked()
 
         if (valid)
         {
-            // Image displayed in the original resolution
+            // Image na resolução original
             ui->mat_Display->setPixmap(QPixmap::fromImage(image));
         }
         else
@@ -176,7 +178,7 @@ void MainWindow::on_actionPixel_triggered()
 
 void MainWindow::on_actionReta_triggered()
 {
-    // Seta o modo de ediçã como reta paramétrica
+    // Seta o modo de edição como reta paramétrica
     ui->mat_Display->setDrawPixelMode(2);
     QMessageBox msg;
     msg.setText("Desenhando reta paramétrica!");
@@ -186,7 +188,7 @@ void MainWindow::on_actionReta_triggered()
 
 void MainWindow::on_actionAlgoritmo_de_Bresenham_triggered()
 {
-    // Seta o modo de edição como Brasenhan
+    // Seta o modo de edição como Reta de Brasenhan
     ui->mat_Display->setDrawPixelMode(3);
     QMessageBox msg;
     msg.setText("Brasenham draw pressed!");
@@ -206,6 +208,7 @@ void MainWindow::on_actionC_rculo_y_sqrt_R_R_x_x_triggered()
 
 void MainWindow::on_actionCirculo_Equa_o_param_trica_triggered()
 {
+    // Seta o modo de edição como Círcunferência (Paramétrica)
     ui->mat_Display->setDrawPixelMode(5);
     QMessageBox msg;
     msg.setText("Cícunferência (Paramétrica)");
@@ -215,9 +218,7 @@ void MainWindow::on_actionCirculo_Equa_o_param_trica_triggered()
 
 void MainWindow::on_pushButtonRGBCalc_clicked()
 {
-    int r = ui->spinBoxR->value();
-    int g = ui->spinBoxG->value();
-    int b = ui->spinBoxB->value();
+
 }
 
 
@@ -255,5 +256,22 @@ void MainWindow::on_pushButtonCalcRGB_clicked()
     ui->spinBoxR->setValue(R);
     ui->spinBoxG->setValue(G);
     ui->spinBoxB->setValue(B);
+}
+
+
+void MainWindow::on_actionPreto_e_Branco_triggered()
+{
+    QPixmap pixmap = ui->mat_Display->pixmap();
+    QImage image = pixmap.toImage();
+
+    for (int y = 0; y < image.height(); y++) {
+        for (int x = 0; x < image.width(); x++) {
+            QRgb pixelColor = image.pixel(x, y);
+            int grayValue = qGray(pixelColor);
+            image.setPixelColor(x, y, QColor(grayValue, grayValue, grayValue));
+        }
+    }
+
+    ui->mat_Display->setPixmap(QPixmap::fromImage(image));
 }
 

@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <qfiledialog.h>
 #include <QMessageBox>
-
 #include <cmath>
 
 QT_BEGIN_NAMESPACE
@@ -61,6 +60,8 @@ private slots:
     void on_pushButtonCalcHSL_clicked();
 
     void on_pushButtonCalcRGB_clicked();
+
+    void on_actionPreto_e_Branco_triggered();
 
 private:
     Ui::MainWindow *ui;
