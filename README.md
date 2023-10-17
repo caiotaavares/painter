@@ -2,9 +2,9 @@
 Simple image editor and raster graphics editor with Qt6 and c++
 
 - [X] 1 - RGB - HSL
-- [ ] 2 - Manipulação básica de pixels
+- [X] 2 - Manipulação básica de pixels
 	- [X] 2.1 - Carregar Imagem
-	- [ ] 2.2 - Negativar Imagem
+	- [X] 2.2 - Negativar Imagem
 	- [X] 2.3 - Desenhar Pixel
 	- [X] 2.4 - Desenhar Retas
 - [X] 3 - Desenhar Retas usando Pixels

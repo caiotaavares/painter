@@ -258,6 +258,13 @@ void MainWindow::on_pushButtonCalcRGB_clicked()
     ui->spinBoxB->setValue(B);
 }
 
+void MainWindow::on_spinBoxG_valueChanged(int) {}
+void MainWindow::on_spinBoxB_valueChanged(int) {}
+void MainWindow::on_spinBoxR_valueChanged(int) {}
+void MainWindow::on_doubleSpinBoxH_valueChanged(double) {}
+void MainWindow::on_doubleSpinBoxS_valueChanged(double) {}
+void MainWindow::on_doubleSpinBoxL_valueChanged(double) {}
+
 
 void MainWindow::on_actionPreto_e_Branco_triggered()
 {
@@ -269,6 +276,27 @@ void MainWindow::on_actionPreto_e_Branco_triggered()
             QRgb pixelColor = image.pixel(x, y);
             int grayValue = qGray(pixelColor);
             image.setPixelColor(x, y, QColor(grayValue, grayValue, grayValue));
+        }
+    }
+
+    ui->mat_Display->setPixmap(QPixmap::fromImage(image));
+}
+
+
+void MainWindow::on_actionNegativa_triggered()
+{
+    int R, G, B;
+    QPixmap pixmap = ui->mat_Display->pixmap();
+    QImage image = pixmap.toImage();
+
+    for (int y = 0; y < image.height(); y++) {
+        for (int x = 0; x < image.width(); x++) {
+            QRgb pixel = image.pixel(x, y);
+            R = 255 - qRed(pixel);
+            G = 255 - qGray(pixel);
+            B = 255 - qBlue(pixel);
+            QRgb newPixel = qRgb(R, G, B);
+            image.setPixel(x, y, newPixel);
         }
     }
 

@@ -63,6 +63,8 @@ private slots:
 
     void on_actionPreto_e_Branco_triggered();
 
+    void on_actionNegativa_triggered();
+
 private:
     Ui::MainWindow *ui;
 };
