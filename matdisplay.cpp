@@ -51,39 +51,50 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
 {
     // Posição do primeiro clique
     static QPoint firstClickPos;
-    if(ev->button() == Qt::LeftButton)
-    {
-        // armazena os pixels da imagem
-        QImage image = this->pixmap().toImage();
 
-        // armazena a imagem na classe QPainter
-        QPainter painter(&image);
+    // armazena os pixels da imagem
+    QImage image = this->pixmap().toImage();
 
-        // seta a cor e espessura a ser utilizada na classe painter
-        painter.setPen(QPen(QColor(0, 0, 255), 2));
+    // armazena a imagem na classe QPainter
+    QPainter painter(&image);
 
+    // seta a cor e espessura a ser utilizada na classe painter
+    painter.setPen(QPen(QColor(0, 0, 255), 2));
 
-        // Posição do segundo clique
-        QPoint mouse_pos = ev->pos();
-
-        int cx = mouse_pos.x(); // Posição x do mouse no segundo clique
-        int cy = mouse_pos.y(); // Posição y do mouse no segundo clique
-        int fcx = firstClickPos.x(); // Posição x do mouse no primeiro clique
-        int fcy = firstClickPos.y(); // Posição y do mouse no primeiro clique
-
+    if (mode == 1) {
         //
         // MODO DE DESENHO PIXEL
         //
-        if (mode == 1) {
-            if (fcx >= 0 && fcx < image.width() &&
-                fcy >= 0 && fcy < image.height())
-            {
-                painter.drawPoint(fcx, fcy);
-            }
-        }
+        if (ev->button() == Qt::LeftButton) {
+            // MODO DE DESENHO PIXEL
+            painter.drawPoint(ev->pos().x(), ev->pos().y());
 
-        // Se firstClickPost não é nulo, já existe uma coordenada do primeiro clique armazenada
-        if (!firstClickPos.isNull()) {
+            // Atualiza a imagem
+            this->setPixmap(QPixmap::fromImage(image));
+        }
+    } else {
+        if(ev->button() == Qt::LeftButton)
+        {
+            // Se firstClickPost não é nulo, já existe uma coordenada do primeiro clique armazenada
+            if (!firstClickPos.isNull()) {
+
+            // armazena os pixels da imagem
+            QImage image = this->pixmap().toImage();
+
+            // armazena a imagem na classe QPainter
+            QPainter painter(&image);
+
+            // seta a cor e espessura a ser utilizada na classe painter
+            painter.setPen(QPen(QColor(0, 0, 255), 2));
+
+            // Posição do segundo clique
+            QPoint mouse_pos = ev->pos();
+
+            int cx = mouse_pos.x(); // Posição x do mouse no segundo clique
+            int cy = mouse_pos.y(); // Posição y do mouse no segundo clique
+            int fcx = firstClickPos.x(); // Posição x do mouse no primeiro clique
+            int fcy = firstClickPos.y(); // Posição y do mouse no primeiro clique
+
             //
             // MODO DE DESENHO RETA
             //
@@ -281,10 +292,12 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
             // Reseta o clique
             firstClickPos = QPoint();
 
-        } else {
-            firstClickPos = mouse_pos;
+            } else {
+                firstClickPos = ev->pos();
+            }
         }
     }
+
     if (ev->button() == Qt::RightButton)
     {
         QMessageBox msg;
