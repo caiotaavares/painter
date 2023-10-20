@@ -202,28 +202,29 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
             // DESENHO DA CIRCUNFERÊNCIA (y = sqrt(R*R - x*x))
             //
             if (mode == 4) {
-                int R = (cx - fcx) / 2; // Raio do círculo
+                int R = static_cast<int>(sqrt(pow(cx - fcx, 2) + pow(cy - fcy, 2))); // Calcular o raio com base na distância entre os dois cliques
 
                 for (int x = -R; x <= R; x++) {
                     int y = static_cast<int>(sqrt(R * R - x * x));
 
-                    // Desenha a cima do eixo X
+                    // Desenha acima do eixo X
                     if (cy + y >= 0 && cy + y < image.height()) {
-                        painter.drawPoint(cx + x - R, cy + y);
+                        painter.drawPoint(cx + x, cy + y);
                     }
 
-                    // Desenha a baixo do eixo x
+                    // Desenha abaixo do eixo x
                     if (cy - y >= 0 && cy - y < image.height()) {
-                        painter.drawPoint(cx + x - R, cy - y);
+                        painter.drawPoint(cx + x, cy - y);
                     }
                 }
             }
+
 
             //
             // DESENHO DA CIRCUNFERÊNCIA (EQUAÇÃO PARAMÉTRICA)
             //
             if (mode == 5) {
-                int R = (cx - fcx) / 2; // Raio do círculo
+                int R = static_cast<int>(sqrt(pow(cx - fcx, 2) + pow(cy - fcy, 2))); // Calcular o raio com base na distância entre os dois cliques
                 double a; // Ângulo
 
                 // O ângulo itera até 2*pi em 0.001º
@@ -232,21 +233,21 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                     int y = static_cast<int>(R * sin(a));
 
                     if (cy + y >= 0 && cy + y < image.height()) {
-                        painter.drawPoint(cx + x - R, cy + y);
+                        painter.drawPoint(cx + x, cy + y);
                     }
 
                     if (cy - y >= 0 && cy - y < image.height()) {
-                        painter.drawPoint(cx + x - R, cy - y);
+                        painter.drawPoint(cx + x, cy - y);
                     }
                 }
             }
+
 
             //
             // Circunferência (Brasenham)
             //
             if (mode == 7) {
-                // Raio do círculo
-                int R = (cx - fcx) / 2;
+                int R = static_cast<int>(sqrt(pow(cx - fcx, 2) + pow(cy - fcy, 2))); // Calcular o raio com base na distância entre os dois cliques
                 int x = 0;
                 int y = R;
                 int h = 1 - R;
