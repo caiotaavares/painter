@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <qfiledialog.h>
 #include <QMessageBox>
+#include <QVector3D>
 #include <cmath>
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +24,8 @@ public slots:
     void handleMouseColor(QPoint &pos);
 
 private slots:
+    QVector3D CalculateObjectCenter(QVector3D* points, int numPoints);
+
     void RGBToHSL(int R, int G, int B, double &H, double &S, double &L);
 
     void HSLToRGB(double H, double S, double L, int &R, int &G, int &B);
@@ -64,6 +67,8 @@ private slots:
     void on_actionPreto_e_Branco_triggered();
 
     void on_actionNegativa_triggered();
+
+    void on_pushButtonCreateHouse_clicked();
 
 private:
     Ui::MainWindow *ui;

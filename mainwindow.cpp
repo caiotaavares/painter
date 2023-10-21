@@ -1,7 +1,12 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "qpen.h"
 
 #include <QMessageBox>
+#include <QPainter>
+#include <QMatrix4x4>
+#include <QVector4D>
+#include <QVector3D>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -141,7 +146,6 @@ void MainWindow::handleMouseColor(QPoint &pos)
     }
 }
 
-
 void MainWindow::on_buton_load_image_clicked()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Choose"), "", tr("Images (*.png *.jpg *.jpeg)"));
@@ -170,9 +174,9 @@ void MainWindow::on_actionPixel_triggered()
 {
     // Seta o modo de edição como Pixel
     ui->mat_Display->setDrawPixelMode(1);
-    QMessageBox msg;
-    msg.setText("Pixel draw pressed!");
-    msg.exec();
+//    QMessageBox msg;
+//    msg.setText("Pixel draw pressed!");
+//    msg.exec();
 }
 
 
@@ -180,9 +184,9 @@ void MainWindow::on_actionReta_triggered()
 {
     // Seta o modo de edição como reta paramétrica
     ui->mat_Display->setDrawPixelMode(2);
-    QMessageBox msg;
-    msg.setText("Desenhando reta paramétrica!");
-    msg.exec();
+//    QMessageBox msg;
+//    msg.setText("Desenhando reta paramétrica!");
+//    msg.exec();
 }
 
 
@@ -190,9 +194,9 @@ void MainWindow::on_actionAlgoritmo_de_Bresenham_triggered()
 {
     // Seta o modo de edição como Reta de Brasenhan
     ui->mat_Display->setDrawPixelMode(3);
-    QMessageBox msg;
-    msg.setText("Brasenham draw pressed!");
-    msg.exec();
+//    QMessageBox msg;
+//    msg.setText("Brasenham draw pressed!");
+//    msg.exec();
 }
 
 
@@ -200,9 +204,9 @@ void MainWindow::on_actionC_rculo_y_sqrt_R_R_x_x_triggered()
 {
     // Seta o modo de edição como Círcunferência (y = sqrt(R*R – x *x))
     ui->mat_Display->setDrawPixelMode(4);
-    QMessageBox msg;
-    msg.setText("Círculo (y = sqrt(R*R – x *x))");
-    msg.exec();
+//    QMessageBox msg;
+//    msg.setText("Círculo (y = sqrt(R*R – x *x))");
+//    msg.exec();
 }
 
 
@@ -210,9 +214,9 @@ void MainWindow::on_actionCirculo_Equa_o_param_trica_triggered()
 {
     // Seta o modo de edição como Círcunferência (Paramétrica)
     ui->mat_Display->setDrawPixelMode(5);
-    QMessageBox msg;
-    msg.setText("Cícunferência (Paramétrica)");
-    msg.exec();
+//    QMessageBox msg;
+//    msg.setText("Cícunferência (Paramétrica)");
+//    msg.exec();
 }
 
 
@@ -225,18 +229,18 @@ void MainWindow::on_pushButtonRGBCalc_clicked()
 void MainWindow::on_actionReta_Param_trica_triggered()
 {
     ui->mat_Display->setDrawPixelMode(6);
-    QMessageBox msg;
-    msg.setText("Reta (Paramétrica).");
-    msg.exec();
+//    QMessageBox msg;
+//    msg.setText("Reta (Paramétrica).");
+//    msg.exec();
 }
 
 
 void MainWindow::on_actionCircunfer_ncia_Brasenham_triggered()
 {
     ui->mat_Display->setDrawPixelMode(7);
-    QMessageBox msg;
-    msg.setText("Circunferência (Brasenham).");
-    msg.exec();
+//    QMessageBox msg;
+//    msg.setText("Circunferência (Brasenham).");
+//    msg.exec();
 }
 
 void MainWindow::on_pushButtonCalcHSL_clicked()
@@ -303,3 +307,143 @@ void MainWindow::on_actionNegativa_triggered()
     ui->mat_Display->setPixmap(QPixmap::fromImage(image));
 }
 
+// Função para calcular o centro do objeto
+QVector3D MainWindow::CalculateObjectCenter(QVector3D* points, int numPoints) {
+    QVector3D center(0, 0, 0);
+    for (int i = 0; i < numPoints; i++) {
+        center += points[i];
+    }
+    center /= numPoints;
+    return center;
+}
+
+void MainWindow::on_pushButtonCreateHouse_clicked()
+{
+    QPixmap pixmap = ui->mat_Display->pixmap();
+    QImage image = pixmap.toImage();
+    QPainter painter(&image);
+
+    // Fatores de escala global e local
+    float globalScale = ui->doubleSpinBoxGlobalScale->value();  // Escala global
+    QVector3D localScale(ui->doubleSpinBoxLocalScaleX->value(), ui->doubleSpinBoxLocalScaleY->value(), ui->doubleSpinBoxLocalScaleZ->value()); // Escala local
+
+    // Defina os fatores de translação em X, Y e Z
+    float translateX = ui->doubleSpinBoxTranslateX->value();
+    float translateY = ui->doubleSpinBoxTranslateY->value();
+    float translateZ = ui->doubleSpinBoxTranslateZ->value();
+
+    // Variáveis para rotação
+    float angle = ui->doubleSpinBoxAngle->value();  // Ângulo da rotação em graus
+    char rotationAxis = ui->comboBoxRotation->currentText().toLower().toLatin1()[0]; // Eixo de rotação: 'x', 'y' ou 'z'
+    bool origem = ui->checkBoxOrigem->isChecked(); // Verifique se a rotação deve ser em torno da origem ou do centro do objeto
+
+    // Crie uma matriz de escala que combina as escalas local e global
+    QMatrix4x4 scaleMatrix;
+    scaleMatrix.scale(globalScale * localScale.x(), globalScale * localScale.y(), globalScale * localScale.z());
+
+    // Crie uma matriz de translação
+    QMatrix4x4 translationMatrix;
+    translationMatrix.translate(translateX, translateY, translateZ);
+
+    // Pontos 3D
+    QVector3D points3D[11];
+
+    // Defina as coordenadas dos pontos 3D
+    points3D[0] = QVector3D(0, 200, 0);
+    points3D[1] = QVector3D(100, 200, 0);
+    points3D[2] = QVector3D(100, 100, 0);
+    points3D[3] = QVector3D(0, 100, 0);
+    points3D[4] = QVector3D(50, 50, 0);
+    points3D[5] = QVector3D(120, 170, 100);
+    points3D[6] = QVector3D(220, 170, 100);
+    points3D[7] = QVector3D(220, 70, 100);
+    points3D[8] = QVector3D(120, 70, 100);
+    points3D[9] = QVector3D(170, 20, 100);
+    points3D[10] = QVector3D(0, 0, 0); // Ponto de referência
+
+    // Aplicar rotação em torno da origem ou do centro do objeto
+    QVector3D center(0, 0, 0);  // Suponha que o centro do objeto está em (0, 0, 0)
+    QMatrix4x4 rotationMatrix;
+
+    if (origem) {
+        // Rotação em torno da origem
+        if (rotationAxis == 'x') {
+            rotationMatrix.rotate(angle, 1, 0, 0);
+        } else if (rotationAxis == 'y') {
+            rotationMatrix.rotate(angle, 0, 1, 0);
+        } else if (rotationAxis == 'z') {
+            rotationMatrix.rotate(angle, 0, 0, 1);
+        }
+    } else {
+        // Rotação em torno do centro do objeto
+        center = CalculateObjectCenter(points3D, 11);  // Função para calcular o centro
+        QMatrix4x4 translateToOriginMatrix;
+        translateToOriginMatrix.translate(-center.x(), -center.y(), -center.z());
+
+        QMatrix4x4 translateBackMatrix;
+        translateBackMatrix.translate(center.x(), center.y(), center.z());
+
+        if (rotationAxis == 'x') {
+            rotationMatrix.rotate(angle, 1, 0, 0);
+        } else if (rotationAxis == 'y') {
+            rotationMatrix.rotate(angle, 0, 1, 0);
+        } else if (rotationAxis == 'z') {
+            rotationMatrix.rotate(angle, 0, 0, 1);
+        }
+
+        rotationMatrix = translateBackMatrix * rotationMatrix * translateToOriginMatrix;
+    }
+
+    // Combine todas as transformações em uma única matriz de modelo
+    QMatrix4x4 modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+
+    // Aplicar a matriz de modelo a todos os pontos 3D
+    for (int i = 0; i < 11; i++) {
+        points3D[i] = modelMatrix * points3D[i];
+    }
+
+    // Define a matriz de projeção (projeção ortográfica)
+    QMatrix4x4 projectionMatrix;
+    projectionMatrix.setToIdentity();
+
+    // Aplique a translação à matriz de projeção
+    projectionMatrix = translationMatrix * projectionMatrix;
+
+    // Projetar pontos 3D no plano 2D (z = 0) com escalas e translação
+    QVector2D points2D[11];
+    for (int i = 0; i < 11; i++) {
+        QVector3D point3D = points3D[i];
+
+        // Aplica a escala diretamente na matriz de projeção
+        point3D = scaleMatrix * point3D;
+
+        QVector4D point4D(point3D.x(), point3D.y(), point3D.z(), 1.0);
+        point4D = projectionMatrix.map(point4D);
+        points2D[i] = QVector2D(point4D.x(), point4D.y());
+    }
+
+    // Define a cor e espessura da linha
+    painter.setPen(QPen(QColor(0, 0, 255), 2));
+
+    // Desenha as linhas entre os pontos 2D
+    painter.drawLine(points2D[0].toPoint(), points2D[1].toPoint());
+    painter.drawLine(points2D[1].toPoint(), points2D[2].toPoint());
+    painter.drawLine(points2D[3].toPoint(), points2D[0].toPoint());
+    painter.drawLine(points2D[3].toPoint(), points2D[4].toPoint());
+    painter.drawLine(points2D[4].toPoint(), points2D[2].toPoint());
+
+    painter.drawLine(points2D[5].toPoint(), points2D[8].toPoint());
+    painter.drawLine(points2D[8].toPoint(), points2D[9].toPoint());
+    painter.drawLine(points2D[9].toPoint(), points2D[7].toPoint());
+    painter.drawLine(points2D[7].toPoint(), points2D[6].toPoint());
+    painter.drawLine(points2D[6].toPoint(), points2D[5].toPoint());
+
+    painter.drawLine(points2D[0].toPoint(), points2D[5].toPoint());
+    painter.drawLine(points2D[1].toPoint(), points2D[6].toPoint());
+    painter.drawLine(points2D[3].toPoint(), points2D[8].toPoint());
+    painter.drawLine(points2D[2].toPoint(), points2D[7].toPoint());
+    painter.drawLine(points2D[4].toPoint(), points2D[9].toPoint());
+
+    // Atualiza a imagem exibida no QLabel
+    ui->mat_Display->setPixmap(QPixmap::fromImage(image));
+}

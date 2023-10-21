@@ -9,7 +9,7 @@ matDisplay::matDisplay(QWidget *parent) : QLabel(parent)
     this->setMouseTracking(true);
 
     // Configura o tamanho do QLabel e cria uma imagem branca
-    QSize size(540, 500);
+    QSize size(571, 561);
     QImage image(size, QImage::Format_RGB32);
     image.fill(Qt::white); // Preenche a imagem com branco
 
@@ -219,7 +219,6 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                 }
             }
 
-
             //
             // DESENHO DA CIRCUNFERÊNCIA (EQUAÇÃO PARAMÉTRICA)
             //
@@ -241,8 +240,6 @@ void matDisplay::mousePressEvent(QMouseEvent *ev)
                     }
                 }
             }
-
-
             //
             // Circunferência (Brasenham)
             //
