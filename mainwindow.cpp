@@ -317,10 +317,12 @@ QVector3D MainWindow::CalculateObjectCenter(QVector3D* points, int numPoints) {
     return center;
 }
 
+// Projeção casinha
 void MainWindow::on_pushButtonCreateHouse_clicked()
 {
     QPixmap pixmap = ui->mat_Display->pixmap();
     QImage image = pixmap.toImage();
+    image.fill(Qt::white); // Preenche a imagem com branco
     QPainter painter(&image);
 
     // Fatores de escala global e local
